@@ -1,0 +1,54 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.7.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group = 'org.example'
+version = '0.0.1-SNAPSHOT'
+description = 'SpringBootDemo'
+apply plugin: 'war'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public/' }
+}
+
+dependencies {
+    // Spring Boot 核心依赖
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // MyBatis-Plus Spring Boot Starter
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.3.1'
+    // Druid 连接池（Spring Boot Starter 版本）
+    implementation 'com.alibaba:druid-spring-boot-starter:1.2.16'
+    // Lombok 依赖配置
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+    // MySQL 驱动
+    runtimeOnly 'mysql:mysql-connector-java:8.0.29'
+    // 外部 Tomcat 部署（打包成 WAR 时需要）
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    // 如果测试代码中也需要使用 Lombok，可以添加以下两行（可选）
+    testCompileOnly 'org.projectlombok:lombok:1.18.36'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
+    // 测试依赖
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// WAR 包配置
+war {
+    enabled = true
+    archiveName = 'demo.war'
+}

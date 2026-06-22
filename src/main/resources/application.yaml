@@ -1,0 +1,155 @@
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# Spring Boot 核心配置
+spring:
+  application:
+    name: springboot-cluster-demo
+
+  # 数据源配置（使用 Druid 连接池）
+  datasource:
+    # 驱动类名（MySQL 8）
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据库连接 URL（通过环境变量覆盖，适配 Docker 部署）
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/demo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8}
+    username: ${SPRING_DATASOURCE_USERNAME:testuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:user123}
+
+    # Druid 连接池配置
+    druid:
+      # ---------- 连接池核心配置 ----------
+      # 初始化连接数
+      initial-size: 5
+      # 最小空闲连接数
+      min-idle: 5
+      # 最大活跃连接数
+      max-active: 20
+      # 获取连接超时时间（毫秒）
+      max-wait: 60000
+      # 连接保持空闲而不被回收的最小时间（毫秒）
+      min-evictable-idle-time-millis: 300000
+      # 连接保持空闲而不被回收的最大时间（毫秒）
+      max-evictable-idle-time-millis: 600000
+      # 连接池中连接空闲多久后，进行空闲连接检测（毫秒）
+      time-between-eviction-runs-millis: 60000
+
+      # ---------- 连接有效性检测 ----------
+      # 检测连接是否有效的 SQL（MySQL）
+      validation-query: SELECT 1
+      # 是否在获取连接前检测连接有效性
+      test-on-borrow: false
+      # 是否在归还连接时检测连接有效性
+      test-on-return: false
+      # 是否在连接空闲时检测连接有效性
+      test-while-idle: true
+
+      # ---------- 连接泄漏监控 ----------
+      # 是否开启连接泄漏监控
+      remove-abandoned: true
+      # 连接超过多少秒被认为泄漏（秒）
+      remove-abandoned-timeout: 180
+      # 是否打印连接泄漏日志
+      log-abandoned: true
+
+      # ---------- 统计与监控（Druid 控制台） ----------
+      # 开启 Druid 监控页面
+      stat-view-servlet:
+        # 是否启用
+        enabled: true
+        # 访问路径
+        url-pattern: /druid/*
+        # 登录用户名
+        login-username: admin
+        # 登录密码
+        login-password: admin123
+        # 是否允许重置数据
+        reset-enable: false
+
+      # ---------- Web 监控配置 ----------
+      web-stat-filter:
+        enabled: true
+        # 拦截路径
+        url-pattern: /*
+        # 排除静态资源
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+        # 开启 Session 监控
+        session-stat-enable: true
+        # Session 统计最大数量
+        session-stat-max-count: 1000
+
+      # ---------- 过滤器配置 ----------
+      filter:
+        # 统计过滤器
+        stat:
+          enabled: true
+          # 慢查询记录（毫秒）
+          slow-sql-millis: 1000
+          # 是否记录慢查询日志
+          log-slow-sql: true
+          # 是否合并 SQL
+          merge-sql: true
+        # 日志过滤器（记录 SQL 执行日志）
+        slf4j:
+          enabled: true
+          # 日志级别
+          statement-log-enabled: true
+          statement-executable-sql-log-enable: true
+
+  # Jackson 配置
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      write-dates-as-timestamps: false
+
+
+# MyBatis-Plus 配置（替换 mybatis 配置）
+mybatis-plus:
+  # Mapper XML 文件位置
+  mapper-locations: classpath:mapper/*.xml
+  # 实体类包路径（用于别名）
+  type-aliases-package: org.example.bean
+  # 全局配置
+  global-config:
+    db-config:
+      # 主键生成策略：自增
+      id-type: auto
+      # 表名前缀（可选）
+      # table-prefix: t_
+      # 逻辑删除字段（可选）
+      # logic-delete-field: deleted
+      # 逻辑已删除值
+      # logic-delete-value: 1
+      # 逻辑未删除值
+      # logic-not-delete-value: 0
+  # 配置信息
+  configuration:
+    # 开启驼峰命名自动映射
+    map-underscore-to-camel-case: false
+    # 开启日志输出
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    # 开启缓存
+    cache-enabled: true
+    # 懒加载
+    lazy-loading-enabled: true
+    # 超时时间
+    default-statement-timeout: 30
+
+# 日志配置
+logging:
+  file:
+    path: /app/logs
+    name: /app/logs/application.log
+  level:
+    root: INFO
+    org.example.springbootdemo: DEBUG
+    org.example.springbootdemo.mapper: DEBUG
+    org.mybatis: DEBUG
+    # Druid 日志
+    com.alibaba.druid: DEBUG
+    # 连接池日志
+    com.alibaba.druid.pool: INFO
