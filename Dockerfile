@@ -1,8 +1,9 @@
 FROM eclipse-temurin:11-jre-alpine
 
-WORKDIR /springboot-cluster-demo
-#war包名称
-COPY composeDemo-0.0.1-SNAPSHOT.war /app/app.jar
+WORKDIR /app
+
+# 通配符匹配任何 WAR 包
+COPY build/libs/*.war /app/app.jar
 
 RUN mkdir -p /app/logs
 
