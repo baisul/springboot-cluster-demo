@@ -2,8 +2,11 @@ FROM eclipse-temurin:11-jre-alpine
 
 WORKDIR /app
 
-# 通配符匹配任何 WAR 包
-COPY build/libs/*.war /app/app.jar
+# 复制所有 WAR 包到 /app/ 目录
+COPY build/libs/*.war /app/
+
+# 重命名为 app.jar
+RUN mv /app/*.war /app/app.jar
 
 RUN mkdir -p /app/logs
 
