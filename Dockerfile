@@ -1,6 +1,6 @@
 FROM eclipse-temurin:11-jre-alpine
 
-WORKDIR /app
+WORKDIR /springboot-cluster-demo
 #war包名称
 COPY composeDemo-0.0.1-SNAPSHOT.war /app/app.jar
 
