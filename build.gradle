@@ -46,9 +46,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-// WAR 包配置
-war {
-    enabled = true
-    archiveName = 'demo.war'
-}
