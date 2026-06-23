@@ -1,17 +1,17 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.7.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'org.springframework.boot' version '3.2.12'
+    id 'io.spring.dependency-management' version '1.1.6'
     id 'java'
+    id 'war'
 }
 
 group = 'org.example'
 version = '0.0.1-SNAPSHOT'
 description = 'SpringBootDemo'
-apply plugin: 'war'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -24,14 +24,20 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // MyBatis-Plus Spring Boot Starter
-    implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.3.1'
+    // 1. 引入 MyBatis-Plus Starter
+    implementation('com.baomidou:mybatis-plus-boot-starter:3.5.11') {
+        // 2. 关键步骤：排除它内部传递的、不兼容的旧版 mybatis-spring
+        exclude group: 'org.mybatis', module: 'mybatis-spring'
+    }
+    // 3. 显式声明一个兼容 Spring Boot 3.x 的新版 mybatis-spring
+    implementation 'org.mybatis:mybatis-spring:3.0.5'
     // Druid 连接池（Spring Boot Starter 版本）
-    implementation 'com.alibaba:druid-spring-boot-starter:1.2.16'
+    implementation 'com.alibaba:druid-spring-boot-starter:1.2.24'
     // Lombok 依赖配置
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
     // MySQL 驱动
-    runtimeOnly 'mysql:mysql-connector-java:8.0.29'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
     // 外部 Tomcat 部署（打包成 WAR 时需要）
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     // 如果测试代码中也需要使用 Lombok，可以添加以下两行（可选）
@@ -41,6 +47,12 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+}
+
+// 编译配置
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
 }
 
 tasks.named('test') {

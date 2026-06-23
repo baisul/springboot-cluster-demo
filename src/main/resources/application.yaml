@@ -15,9 +15,10 @@ spring:
     # 驱动类名（MySQL 8）
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 数据库连接 URL（通过环境变量覆盖，适配 Docker 部署）
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/demo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8}
-    username: ${SPRING_DATASOURCE_USERNAME:testuser}
-    password: ${SPRING_DATASOURCE_PASSWORD:user123}
+    url: jdbc:mysql://localhost:3306/demo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8
+    username: root
+    password: root
+
 
     # Druid 连接池配置
     druid:
