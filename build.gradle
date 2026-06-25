@@ -59,12 +59,16 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-war {
-    enabled = true
-    archiveFileName = 'app.war'   // 固定名称
+bootWar {
+    archiveFileName = 'app.war'
 }
 
-// 禁用 plain 版本的生成
+// 禁用普通 war（避免生成两个）
+war {
+    enabled = false
+}
+
+// 禁用 plain 版本
 tasks.withType(War) {
     archiveClassifier = ''
 }
