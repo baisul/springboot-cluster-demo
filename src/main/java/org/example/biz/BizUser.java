@@ -17,7 +17,7 @@ public class BizUser {
     }
 
     public List<UserBean> getAllUserList() {
-        return null;
+        return userService.getAllUserList();
     }
 
 }
