@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.bean.UserBean;
 import org.example.biz.BizUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,5 +39,10 @@ public class UserController {
             response.put("user", user);
         }
         return response;
+    }
+
+    @GetMapping(value = "getAllUserList",produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<UserBean> getAllUserList() {
+        return bizUser.getAllUserList();
     }
 }

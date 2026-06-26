@@ -7,6 +7,8 @@ import org.example.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserDao implements IUserDao {
     @Autowired
@@ -17,5 +19,11 @@ public class UserDao implements IUserDao {
         query.select(UserBean::getId,UserBean::getName,UserBean::getAge,UserBean::getCreate_time)
                 .eq(UserBean::getId,id);
         return userMapper.selectOne(query);
+    }
+
+    @Override
+    public List<UserBean> getAllUserList() {
+        var query = new LambdaQueryWrapper<UserBean>();
+        return userMapper.selectList(query);
     }
 }

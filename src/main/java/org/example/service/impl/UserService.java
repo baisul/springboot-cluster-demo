@@ -8,6 +8,8 @@ import org.example.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService extends ServiceImpl<UserMapper,UserBean> implements IUserService {
     @Autowired
@@ -15,5 +17,10 @@ public class UserService extends ServiceImpl<UserMapper,UserBean> implements IUs
     @Override
     public UserBean getUserById(long id) {
         return userDao.getUserById(id);
+    }
+
+    @Override
+    public List<UserBean> getAllUserList() {
+        return userDao.getAllUserList();
     }
 }
